@@ -1,5 +1,10 @@
 FROM centos:latest
 
+# Update the YUM repository URLs
+RUN sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo \
+    && sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo \
+    && sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
 # Install dependencies
 RUN yum install -y httpd zip unzip \
     && yum clean all
@@ -18,4 +23,3 @@ EXPOSE 80 22
 
 # Start the HTTPD server
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
